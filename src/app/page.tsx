@@ -72,7 +72,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center mt-4 scale-75 md:scale-100">
+    <main className="flex flex-col items-center -mt-2 md:mt-4 scale-75 md:scale-100">
       <div
         ref={posterRef}
         className="aspect-[255/330] p-[30px] pt-[83px] bg-[url('/bingo.jpeg')] bg-contain"
