@@ -115,8 +115,11 @@ export default function Home() {
           })}
         </div>
       </div>
-      <div className="text-white mt-1">
-        点击对应图片上传，完成你的 #NiCE TRY BINGO！
+      <div className="text-white mt-1 text-center">
+        <div>点击对应图片上传，完成你的 #NiCE TRY BINGO！</div>
+        <div className="text-sm text-gray-300">
+          （因为是一个“以轻面”的网站，所以请尽可能使用电脑的 Chrome 浏览器操作。）
+        </div>
       </div>
       <button
         className="text-3xl text-[#EF3323] font-bold bg-white px-10 py-5 mt-4"
