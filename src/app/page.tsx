@@ -72,10 +72,10 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center mt-4">
+    <main className="flex flex-col items-center mt-4 scale-75 md:scale-100">
       <div
         ref={posterRef}
-        className="w-[511px] h-[661px] aspect-[255/330] p-[30px] pt-[83px] bg-[url('/bingo.jpeg')] bg-contain"
+        className="aspect-[255/330] p-[30px] pt-[83px] bg-[url('/bingo.jpeg')] bg-contain"
       >
         <div className="grid grid-rows-[repeat(5,83px)] grid-cols-[repeat(5,83px)] gap-[9px]">
           {bingoNames.map((bingo, index) => {
@@ -115,7 +115,9 @@ export default function Home() {
           })}
         </div>
       </div>
-      <div className="text-white mt-1">点击对应图片上传，完成你的 #NiCE TRY BINGO！</div>
+      <div className="text-white mt-1">
+        点击对应图片上传，完成你的 #NiCE TRY BINGO！
+      </div>
       <button
         className="text-3xl text-[#EF3323] font-bold bg-white px-10 py-5 mt-4"
         onClick={handleDownload}
