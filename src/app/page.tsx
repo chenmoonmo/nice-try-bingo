@@ -121,12 +121,24 @@ export default function Home() {
       {isMounted && <Background />}
       <div
         ref={posterRef}
-        className="relative w-full max-w-[511px] aspect-[255/330] px-8 pt-5 bg-white bg-contain md:pt-7 z-100"
+        className="relative flex flex-col items-center w-full max-w-[511px] aspect-[255/330] px-8 pt-5 bg-white bg-contain md:pt-7 z-100"
       >
-        <h1 className="font-extrabold text-center underline decoration-[#FA0101] underline-offset-8 indent-6 md:text-xl">
+        <h1
+          className="font-extrabold text-center indent-6 md:text-xl
+        after:content-['']
+        after:block
+        after:w-full
+        after:h-[2px]
+        after:bg-[#FA0101]
+        after:mt-1
+        after:ml-2
+        after:rounded-[8px]
+        after:z-[-1]
+        "
+        >
           NiCE TRY 都市散步 BINGO
         </h1>
-        <div className="grid grid-rows-5 grid-cols-5 gap-[9px] mt-4 md:mt-6">
+        <div className="grid w-full grid-rows-5 grid-cols-5 gap-[9px] mt-4 md:mt-6">
           {bingoNames.map((bingo, index) => {
             const currentImage =
               bingoImages[index] ?? `/bingos/Slice ${index + 1}.png`;
@@ -137,12 +149,6 @@ export default function Home() {
                 key={"bingo" + bingo}
                 htmlFor={"bingo" + bingo}
                 className="relative flex items-end justify-center cursor-pointer bg-cover bg-center bg-no-repeat aspect-square"
-                style={
-                  {
-                    // backgroundImage: `url(${currentImage})`,
-                    // backgroundColor: hasBingo ? "#FFF" : "transparent",
-                  }
-                }
               >
                 <Image
                   src={currentImage}
@@ -178,7 +184,7 @@ export default function Home() {
             );
           })}
         </div>
-        <div className="text-xs scale-50 -translate-x-[25%] whitespace-nowrap leading-5 md:text-base">
+        <div className=" self-start text-xs scale-50 -translate-x-[25%] whitespace-nowrap leading-5 md:text-base">
           <p>游玩方法：</p>
           <p>观察到 BINGO 卡上描述的情景时，可以在对应的格子上画圈。</p>
           <p>
