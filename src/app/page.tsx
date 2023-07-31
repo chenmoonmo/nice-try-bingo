@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { useState } from "react";
 import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
+import Image from "next/image";
 
 const bingoNames = [
   "瀑布",
@@ -48,13 +49,37 @@ const words = [
   "#nicetrybingo",
 ];
 
+const Background = memo(() => {
+  const [wordsList] = useState(words.sort(() => Math.random() - 0.5));
+
+  return wordsList.map((word, index) => {
+    const left =
+      Math.random() > 0.5 ? Math.random() * 10 + 5 : Math.random() * -50 + 100;
+    return (
+      <a
+        key={index}
+        href="https://nicetrypod.com/"
+        target="__blank"
+        className={`absolute hidden right-0 text-4xl font-bold text-white -z-0 whitespace-nowrap opacity-60 hover:opacity-100 md:block cursor-[url("/try.png"),default]`}
+        style={{
+          top: `${(index + 1) * 60}px`,
+          left: `${left}%`,
+          animationDelay: Math.random() * 2 + "s",
+        }}
+      >
+        {word}
+      </a>
+    );
+  });
+});
+
+Background.displayName = "Background";
+
 export default function Home() {
   const posterRef = React.useRef<HTMLDivElement>(null);
   const [bingoImages, setBingoImages] = useState<string[]>([]);
 
   const [isMounted, setIsMounted] = useState(false);
-
-  const wordsList = words.sort(() => Math.random() - 0.5);
 
   const handleImageChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -93,28 +118,7 @@ export default function Home() {
 
   return (
     <main className="relative flex flex-col items-center min-h-screen p-4 pt-8 overflow-hidden">
-      {isMounted &&
-        wordsList.map((word, index) => {
-          const left =
-            Math.random() > 0.5
-              ? Math.random() * 10 + 5
-              : Math.random() * -50 + 100;
-          return (
-            <a
-              key={index}
-              href="https://nicetrypod.com/"
-              target="__blank"
-              className={`absolute hidden right-0 text-4xl font-bold text-white -z-0 whitespace-nowrap opacity-60 hover:opacity-100 md:block cursor-[url("/try.png"),default]`}
-              style={{
-                top: `${(index + 1) * 60}px`,
-                left: `${left}%`,
-                animationDelay: Math.random() * 2 + "s",
-              }}
-            >
-              {word}
-            </a>
-          );
-        })}
+      {isMounted && <Background />}
       <div
         ref={posterRef}
         className="relative w-full max-w-[511px] aspect-[255/330] px-8 pt-5 bg-white bg-contain md:pt-7 z-100"
@@ -125,7 +129,7 @@ export default function Home() {
         <div className="grid grid-rows-5 grid-cols-5 gap-[9px] mt-4 md:mt-6">
           {bingoNames.map((bingo, index) => {
             const currentImage =
-              bingoImages[index] ?? `"/bingos/Slice ${index + 1}.png"`;
+              bingoImages[index] ?? `/bingos/Slice ${index + 1}.png`;
             const hasBingo = bingoImages[index];
 
             return (
@@ -133,11 +137,19 @@ export default function Home() {
                 key={"bingo" + bingo}
                 htmlFor={"bingo" + bingo}
                 className="relative flex items-end justify-center cursor-pointer bg-cover bg-center bg-no-repeat aspect-square"
-                style={{
-                  backgroundImage: `url(${currentImage})`,
-                  backgroundColor: hasBingo ? "#FFF" : "transparent",
-                }}
+                style={
+                  {
+                    // backgroundImage: `url(${currentImage})`,
+                    // backgroundColor: hasBingo ? "#FFF" : "transparent",
+                  }
+                }
               >
+                <Image
+                  src={currentImage}
+                  alt={bingo}
+                  layout="fill"
+                  className="absolute w-full h-full object-cover object-center"
+                />
                 <input
                   hidden
                   id={"bingo" + bingo}
