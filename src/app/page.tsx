@@ -60,10 +60,7 @@ export default function Home() {
   };
 
   const handleDownload = () => {
-    toPng(posterRef.current!, {
-      width: 511,
-      height: 661,
-    }).then(function (dataUrl) {
+    toPng(posterRef.current!).then(function (dataUrl) {
       if (dataUrl) {
         console.log(dataUrl);
         saveAs(dataUrl, "MYNiCETRYBINGO.png");
@@ -72,22 +69,29 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center -mt-2 md:mt-4 scale-75 md:scale-100">
+    <main className="flex flex-col items-center p-4 pt-8">
       <div
         ref={posterRef}
-        className="aspect-[255/330] p-[30px] pt-[83px] bg-[url('/bingo.jpeg')] bg-contain"
+        // bg-[url('/bingo.jpeg')]
+        className="w-full max-w-[511px] aspect-[255/330] px-8 pt-5  bg-white bg-contain md:pt-7"
       >
-        <div className="grid grid-rows-[repeat(5,83px)] grid-cols-[repeat(5,83px)] gap-[9px]">
+        <h1 className="font-extrabold text-center underline decoration-[#FA0101] underline-offset-8 indent-6 md:text-xl">
+          NiCE TRY 都市散步 BINGO
+        </h1>
+        <div className="grid grid-rows-5 grid-cols-5 gap-[9px] mt-4 md:mt-6">
           {bingoNames.map((bingo, index) => {
-            const currentImage = bingoImages[index];
+            const currentImage =
+              bingoImages[index] ?? `"/bingos/Slice ${index + 1}.png"`;
+            const hasBingo = bingoImages[index];
+
             return (
               <label
                 key={"bingo" + bingo}
                 htmlFor={"bingo" + bingo}
-                className="relative flex items-end justify-center cursor-pointer bg-cover bg-center bg-no-repeat"
+                className="relative flex items-end justify-center cursor-pointer bg-cover bg-center bg-no-repeat aspect-square"
                 style={{
-                  backgroundImage: `url(${bingoImages[index]})`,
-                  backgroundColor: currentImage ? "#FFF" : "transparent",
+                  backgroundImage: `url(${currentImage})`,
+                  backgroundColor: hasBingo ? "#FFF" : "transparent",
                 }}
               >
                 <input
@@ -98,11 +102,11 @@ export default function Home() {
                   onChange={(e) => handleImageChange(e, index)}
                 />
 
-                {currentImage && (
+                {hasBingo && (
                   <>
                     <div
-                      className={`text-center font-medium pb-1 mix-blend-difference text-white whitespace-nowrap
-                 ${index === 3 ? "scale-50" : ""}
+                      className={`text-xs text-center font-medium pb-1 mix-blend-difference text-white whitespace-nowrap
+                 ${index === 3 ? "scale-50" : ""} md:text-base
                  `}
                     >
                       {bingo}
@@ -114,11 +118,21 @@ export default function Home() {
             );
           })}
         </div>
+        <div className="text-xs scale-50 -translate-x-[25%] whitespace-nowrap leading-5 md:text-base">
+          <p>游玩方法：</p>
+          <p>观察到 BINGO 卡上描述的情景时，可以在对应的格子上画圈。</p>
+          <p>
+            有五个格子连成一行（横向、纵向或斜向都可以）时，可以大喊BINGO，宣布获胜。
+          </p>
+          <p>严格一点当然好，大致上一样也可以。</p>
+          <p>探索过程中拍下的照片或者视频，可以加上 #NiCETRYbingo 发布。</p>
+        </div>
       </div>
       <div className="text-white mt-1 text-center">
         <div>点击对应图片上传，完成你的 #NiCE TRY BINGO！</div>
         <div className="text-sm text-gray-300">
-          （因为是一个“以轻面”的网站，所以请尽可能使用电脑的 Chrome 浏览器操作。）
+          （因为是一个“以轻面”的网站，所以请尽可能使用电脑的 Chrome
+          浏览器操作。）
         </div>
       </div>
       <button
