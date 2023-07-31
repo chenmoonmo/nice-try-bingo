@@ -5,6 +5,7 @@ import { useState } from "react";
 import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
 import NextImage from "next/image";
+import { useToast } from "@chakra-ui/react";
 
 const bingoNames = [
   "瀑布",
@@ -75,6 +76,7 @@ const Background = memo(() => {
 Background.displayName = "Background";
 
 export default function Home() {
+  const toast = useToast();
   const posterRef = React.useRef<HTMLDivElement>(null);
   const [bingoImages, setBingoImages] = useState<string[]>([]);
 
@@ -106,6 +108,12 @@ export default function Home() {
     if (posterRef.current === null) {
       return;
     }
+    toast({
+      position: "bottom",
+      title: "正在生成图片",
+      status: "info",
+      isClosable: false,
+    });
     toPng(posterRef.current!, {
       canvasWidth: 2550,
       canvasHeight: 3300,
@@ -114,9 +122,17 @@ export default function Home() {
     }).then(function (dataUrl) {
       if (dataUrl) {
         saveAs(dataUrl, "MYNiCETRYBINGO.png");
+        toast.closeAll();
+        toast({
+          position: "bottom",
+          title: "图片下载成功",
+          status: "success",
+          isClosable: true,
+          duration: 2000,
+        });
       }
     });
-  }, [posterRef]);
+  }, [toast]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -130,7 +146,7 @@ export default function Home() {
         className="relative flex flex-col items-center w-full max-w-[511px] aspect-[255/330] px-8 pt-5 bg-white bg-contain md:pt-7 z-100"
       >
         <h1
-          className="font-extrabold text-center indent-6 md:text-xl whitespace-nowrap
+          className="font-extrabold text-center text-black indent-6 md:text-xl whitespace-nowrap 
         after:content-['']
         after:block
         after:w-full
@@ -147,7 +163,7 @@ export default function Home() {
         <div className="grid w-full grid-rows-5 grid-cols-5 gap-[9px] mt-4 md:mt-6">
           {bingoNames.map((bingo, index) => {
             const currentImage =
-              bingoImages[index] ?? `/bingos/Slice ${index + 1}.png`;
+              bingoImages[index] ?? `/bingos/slice-${index + 1}.png`;
             const hasBingo = bingoImages[index];
             return (
               <label
@@ -156,9 +172,11 @@ export default function Home() {
                 className="relative flex items-end justify-center cursor-pointer bg-cover bg-center bg-no-repeat aspect-square"
               >
                 <NextImage
+                  unoptimized
+                  fill
+                  id={"bingo" + bingo + "image"}
                   src={currentImage}
                   alt={bingo}
-                  layout="fill"
                   className="absolute w-full h-full object-cover object-center"
                 />
                 <input
@@ -172,7 +190,7 @@ export default function Home() {
                 {hasBingo && (
                   <>
                     <div
-                      className={`text-xs text-center font-medium pb-1 text-white whitespace-nowrap md:text-base
+                      className={`text-sm text-center font-medium pb-1 text-white whitespace-nowrap sm:text-base
                  ${
                    index === 3
                      ? "scale-50 md:scale-50"
@@ -192,7 +210,7 @@ export default function Home() {
             );
           })}
         </div>
-        <div className=" self-start text-xs scale-50 -translate-x-[25%] whitespace-nowrap leading-5 md:text-base">
+        <div className="self-start text-black text-xs scale-50 -translate-x-[25%] whitespace-nowrap leading-5 md:text-base">
           <p>游玩方法：</p>
           <p>观察到 BINGO 卡上描述的情景时，可以在对应的格子上画圈。</p>
           <p>
