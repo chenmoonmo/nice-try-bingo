@@ -1,10 +1,10 @@
 "use client";
 
-import React, { memo, useEffect } from "react";
+import React, { memo, useCallback, useEffect } from "react";
 import { useState } from "react";
 import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
-import Image from "next/image";
+import NextImage from "next/image";
 
 const bingoNames = [
   "瀑布",
@@ -60,11 +60,10 @@ const Background = memo(() => {
         key={index}
         href="https://nicetrypod.com/"
         target="__blank"
-        className={`absolute hidden right-0 text-4xl font-bold text-white -z-0 whitespace-nowrap opacity-60 hover:opacity-100 md:block cursor-[url("/try.png"),default]`}
+        className={`absolute hidden right-0 text-4xl font-bold text-white -z-0 whitespace-nowrap opacity-60 hover:opacity-100 md:block cursor-[url("/try.png"),default] max-w-[max-content]`}
         style={{
           top: `${(index + 1) * 60}px`,
           left: `${left}%`,
-          animationDelay: Math.random() * 2 + "s",
         }}
       >
         {word}
@@ -103,14 +102,21 @@ export default function Home() {
     }
   };
 
-  const handleDownload = () => {
-    toPng(posterRef.current!).then(function (dataUrl) {
+  const handleDownload = useCallback(() => {
+    if (posterRef.current === null) {
+      return;
+    }
+    toPng(posterRef.current!, {
+      canvasWidth: 2550,
+      canvasHeight: 3300,
+      cacheBust: true,
+      quality: 1,
+    }).then(function (dataUrl) {
       if (dataUrl) {
-        console.log(dataUrl);
         saveAs(dataUrl, "MYNiCETRYBINGO.png");
       }
     });
-  };
+  }, [posterRef]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -124,7 +130,7 @@ export default function Home() {
         className="relative flex flex-col items-center w-full max-w-[511px] aspect-[255/330] px-8 pt-5 bg-white bg-contain md:pt-7 z-100"
       >
         <h1
-          className="font-extrabold text-center indent-6 md:text-xl
+          className="font-extrabold text-center indent-6 md:text-xl whitespace-nowrap
         after:content-['']
         after:block
         after:w-full
@@ -143,14 +149,13 @@ export default function Home() {
             const currentImage =
               bingoImages[index] ?? `/bingos/Slice ${index + 1}.png`;
             const hasBingo = bingoImages[index];
-
             return (
               <label
                 key={"bingo" + bingo}
                 htmlFor={"bingo" + bingo}
                 className="relative flex items-end justify-center cursor-pointer bg-cover bg-center bg-no-repeat aspect-square"
               >
-                <Image
+                <NextImage
                   src={currentImage}
                   alt={bingo}
                   layout="fill"
@@ -167,13 +172,16 @@ export default function Home() {
                 {hasBingo && (
                   <>
                     <div
-                      className={`text-xs text-center font-medium pb-1 mix-blend-difference text-white whitespace-nowrap md:text-base
+                      className={`text-xs text-center font-medium pb-1 text-white whitespace-nowrap md:text-base
                  ${
                    index === 3
                      ? "scale-50 md:scale-50"
                      : "scale-90 md:scale-100"
                  }
                  `}
+                      style={{
+                        textShadow: "0px 0px 2px #000000",
+                      }}
                     >
                       {bingo}
                     </div>
@@ -195,7 +203,10 @@ export default function Home() {
         </div>
       </div>
       <div className="text-white mt-1 text-center">
-        <div>点击对应图片上传，完成你的 #NiCE TRY BINGO！</div>
+        <div>
+          点击对应图片上传，完成你的 #NiCE TRY BINGO！然后点击 BINGO
+          等待图片生成！
+        </div>
         <div className="text-sm text-gray-300">
           （因为是一个“以轻面”的网站，所以请尽可能使用电脑的 Chrome
           浏览器操作。）
