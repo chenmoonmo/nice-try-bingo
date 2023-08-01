@@ -6,6 +6,7 @@ import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
 import NextImage from "next/image";
 import { useToast } from "@chakra-ui/react";
+import html2canvas from "html2canvas";
 
 const bingoNames = [
   "瀑布",
@@ -61,7 +62,7 @@ const Background = memo(() => {
         key={index}
         href="https://nicetrypod.com/"
         target="__blank"
-        className={`absolute hidden right-0 text-4xl font-bold text-white -z-0 whitespace-nowrap opacity-60 hover:opacity-100 md:block cursor-[url("/try.png"),default] max-w-[max-content]`}
+        className={`absolute hidden right-0 text-4xl font-bold text-white -z-0 whitespace-nowrap opacity-40 hover:opacity-100 md:block cursor-[url("/try.png"),default] max-w-[max-content]`}
         style={{
           top: `${(index + 1) * 60}px`,
           left: `${left}%`,
@@ -79,7 +80,6 @@ export default function Home() {
   const toast = useToast();
   const posterRef = React.useRef<HTMLDivElement>(null);
   const [bingoImages, setBingoImages] = useState<string[]>([]);
-
   const [isMounted, setIsMounted] = useState(false);
 
   const handleImageChange = (
@@ -113,14 +113,16 @@ export default function Home() {
       title: "正在生成图片",
       status: "info",
       isClosable: false,
+      duration: 2000000,
     });
+
     toPng(posterRef.current!, {
       canvasWidth: 2550,
       canvasHeight: 3300,
       cacheBust: true,
       quality: 1,
     }).then(function (dataUrl) {
-      if (dataUrl) {
+      if (dataUrl.length > 100) {
         saveAs(dataUrl, "MYNiCETRYBINGO.png");
         toast.closeAll();
         toast({
@@ -130,6 +132,29 @@ export default function Home() {
           isClosable: true,
           duration: 2000,
         });
+      } else {
+        html2canvas(posterRef.current!, {
+          scale: 2,
+        })
+          .then(function (canvas) {
+            document.body.appendChild(canvas);
+            canvas.style.display = "none";
+            const dataUrl = canvas.toDataURL("image/png", 1);
+            document.body.removeChild(canvas);
+            saveAs(dataUrl, "MYNiCETRYBINGO.png");
+            toast.closeAll();
+            toast({
+              position: "bottom",
+              title: "图片下载成功",
+              status: "success",
+              isClosable: true,
+              duration: 2000,
+            });
+          })
+          .catch((e) => {
+            console.log(e);
+            alert(e);
+          });
       }
     });
   }, [toast]);
@@ -143,19 +168,20 @@ export default function Home() {
       {isMounted && <Background />}
       <div
         ref={posterRef}
-        className="relative flex flex-col items-center w-full max-w-[511px] aspect-[255/330] px-8 pt-5 bg-white bg-contain md:pt-7 z-100"
+        className="relative flex flex-col items-center w-full max-w-[511px] aspect-[255/330] px-6 pt-5 bg-white bg-contain md:pt-7 md:px-8 z-100"
       >
         <h1
-          className="font-extrabold text-center text-black indent-6 md:text-xl whitespace-nowrap 
+          className="relative font-extrabold text-center text-black md:text-xl whitespace-nowrap 
         after:content-['']
         after:block
+        after:absolute
+        after:left-1/2
+        after:-bottom-1
         after:w-full
         after:h-[2px]
         after:bg-[#FA0101]
-        after:mt-1
-        after:ml-2
         after:rounded-[8px]
-        after:z-[-1]
+        after:translate-x-[-50%]
         "
         >
           NiCE TRY 都市散步 BINGO
@@ -169,16 +195,17 @@ export default function Home() {
               <label
                 key={"bingo" + bingo}
                 htmlFor={"bingo" + bingo}
-                className="relative flex items-end justify-center cursor-pointer bg-cover bg-center bg-no-repeat aspect-square"
+                className="relative flex items-end justify-center cursor-pointer aspect-square"
               >
-                <NextImage
-                  unoptimized
-                  fill
-                  id={"bingo" + bingo + "image"}
-                  src={currentImage}
-                  alt={bingo}
-                  className="absolute w-full h-full object-cover object-center"
-                />
+                <div className="absolute w-full h-full flex items-center justify-center overflow-hidden">
+                  <img
+                    id={"bingo" + bingo + "image"}
+                    src={currentImage}
+                    alt={bingo}
+                    className="w-full"
+                  />
+                </div>
+
                 <input
                   hidden
                   id={"bingo" + bingo}
@@ -203,7 +230,7 @@ export default function Home() {
                     >
                       {bingo}
                     </div>
-                    <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[105%] h-[105%] rounded-full border-[#EF3323] border-[3px] opacity-70" />
+                    <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[105%] h-[105%] rounded-full border-[#EF3323] border-[3px] opacity-90" />
                   </>
                 )}
               </label>
@@ -220,22 +247,24 @@ export default function Home() {
           <p>探索过程中拍下的照片或者视频，可以加上 #NiCETRYbingo 发布。</p>
         </div>
       </div>
-      <div className="text-white mt-1 text-center">
-        <div>
-          点击对应图片上传，完成你的 #NiCE TRY BINGO！然后点击 BINGO
-          等待图片生成！
+      <div className="relative z-100 flex flex-col items-center text-xs mt-2 md:text-base">
+        <div className="text-white text-center">
+          <div>
+            <p>点击对应图片上传，完成你的 #NiCE TRY BINGO！</p>
+            <p>然后点击 BINGO 等待图片生成！</p>
+          </div>
+          <div className="text-xs text-gray-300 mt-1">
+            （因为是一个“以轻面”的网站，所以请尽可能使用电脑的 Chrome
+            浏览器操作。）
+          </div>
         </div>
-        <div className="text-sm text-gray-300">
-          （因为是一个“以轻面”的网站，所以请尽可能使用电脑的 Chrome
-          浏览器操作。）
-        </div>
+        <button
+          className="text-xl md:text-3xl text-[#EF3323] font-bold bg-white px-10 py-2 mt-4 active:scale-90 active:shadow-xl transition-all md:px-10 md:py-5"
+          onClick={handleDownload}
+        >
+          BINGO!
+        </button>
       </div>
-      <button
-        className="text-3xl text-[#EF3323] font-bold bg-white px-10 py-5 mt-4 active:scale-90 active:shadow-xl transition-all"
-        onClick={handleDownload}
-      >
-        BINGO!
-      </button>
     </main>
   );
 }
