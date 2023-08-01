@@ -195,7 +195,7 @@ export default function Home() {
               <label
                 key={"bingo" + bingo}
                 htmlFor={"bingo" + bingo}
-                className="relative flex items-end justify-center cursor-pointer aspect-square"
+                className="relative flex items-end justify-center cursor-pointer aspect-square hover:shadow-md"
               >
                 <div className="absolute w-full h-full flex items-center justify-center overflow-hidden">
                   <img
