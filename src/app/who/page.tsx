@@ -99,26 +99,28 @@ export default function Who() {
         </div>
         <div className="flex justify-start flex-col md:flex-row">
           <div>
-            <div
-              ref={posterRef}
-              className=" bg-white w-[300px] font-extrabold rounded-lg px-4 py-3 font-sans"
-              style={{
-                color,
-              }}
-            >
-              <h2 className="text-6xl">HELLO</h2>
-              <h3 className="leading-7 text-4xl">I&apos;M</h3>
+            <div ref={posterRef} className="bg-gray-100 p-4">
               <div
-                className={`font-[qiuhong] text-black mt-2 tracking-widest`}
-                contentEditable
+                className=" bg-white w-[300px] font-extrabold rounded-lg px-4 py-3 font-sans shadow-xl"
                 style={{
-                  fontSize: `${fontSize}px`,
-                  lineHeight: `${fontSize}px`,
+                  color,
                 }}
               >
-                播客布林
+                <h2 className="text-6xl">HELLO</h2>
+                <h3 className="leading-7 text-4xl">I&apos;M</h3>
+                <div
+                  className={`font-[qiuhong] text-black mt-2 tracking-widest`}
+                  contentEditable
+                  style={{
+                    fontSize: `${fontSize}px`,
+                    lineHeight: `${fontSize}px`,
+                  }}
+                >
+                  播客布林
+                </div>
               </div>
             </div>
+
             <div className="mt-4">修改上面的文字，输入你的答案</div>
           </div>
           <div className="flex flex-col justify-start  md:ml-10 mt-4 md:mt-0">
@@ -130,9 +132,9 @@ export default function Who() {
             <label className="mb-1 mt-4">字体大小</label>
             <Slider min={24} max={64} value={fontSize} onChange={setFontSize}>
               <SliderTrack bg="red.100">
-                <SliderFilledTrack bg="#EA3622"/>
+                <SliderFilledTrack bg="#EA3622" />
               </SliderTrack>
-              <SliderThumb boxSize="6"  className="round-full overflow-hidden">
+              <SliderThumb boxSize="6" className="round-full overflow-hidden">
                 <Image src="/nice.webp" layout="fill" alt="nice" />
               </SliderThumb>
             </Slider>
