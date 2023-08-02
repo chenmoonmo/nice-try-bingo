@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { memo, useCallback, useState } from "react";
 import Typical from "react-typical";
 import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
@@ -16,6 +16,18 @@ import {
 import html2canvas from "html2canvas";
 import { HexColorPicker } from "react-colorful";
 import Image from "next/image";
+
+const Text = memo(() => {
+  return (
+    <Typical
+      steps={["你", 500, "你是一个怎么样的人:", 1000]}
+      loop={1}
+      wrapper="h1"
+    />
+  );
+});
+
+Text.displayName = "Text";
 
 export default function Who() {
   const toast = useToast();
@@ -37,8 +49,8 @@ export default function Who() {
     });
 
     toPng(posterRef.current!, {
-      canvasWidth: posterRef.current.clientWidth,
-      canvasHeight: posterRef.current.clientHeight,
+      canvasWidth: posterRef.current.clientWidth * 2,
+      canvasHeight: posterRef.current.clientHeight * 2,
       cacheBust: true,
       quality: 1,
     }).then(function (dataUrl) {
@@ -82,13 +94,8 @@ export default function Who() {
   return (
     <main className="flex justify-center items-start min-h-screen py-20 md:pt-40">
       <div>
-        {/* <h1 className="text-3xl font-bold mb-8">你是一个怎么样的人:</h1> */}
         <div className="text-3xl font-bold mb-8">
-          <Typical
-            steps={["你", 500, "你是一个怎么样的人:", 1000]}
-            loop={1}
-            wrapper="h1"
-          />
+          <Text />
         </div>
         <div className="flex justify-start flex-col md:flex-row">
           <div>
@@ -100,12 +107,13 @@ export default function Who() {
               }}
             >
               <h2 className="text-6xl">HELLO</h2>
-              <h3 className="leading-7 text-4xl ">I&apos;M</h3>
+              <h3 className="leading-7 text-4xl">I&apos;M</h3>
               <div
                 className={`font-[qiuhong] text-black mt-2 tracking-widest`}
                 contentEditable
                 style={{
                   fontSize: `${fontSize}px`,
+                  lineHeight: `${fontSize}px`,
                 }}
               >
                 播客布林
