@@ -101,7 +101,7 @@ export default function Who() {
           <div>
             <div
               ref={posterRef}
-              className=" bg-white w-[300px] font-extrabold rounded-lg px-8 py-3 font-sans"
+              className=" bg-white w-[300px] font-extrabold rounded-lg px-4 py-3 font-sans"
               style={{
                 color,
               }}
@@ -129,10 +129,10 @@ export default function Who() {
             />
             <label className="mb-1 mt-4">字体大小</label>
             <Slider min={24} max={64} value={fontSize} onChange={setFontSize}>
-              <SliderTrack>
-                <SliderFilledTrack />
+              <SliderTrack bg="red.100">
+                <SliderFilledTrack bg="#EA3622"/>
               </SliderTrack>
-              <SliderThumb boxSize="6" className="round-full overflow-hidden">
+              <SliderThumb boxSize="6"  className="round-full overflow-hidden">
                 <Image src="/nice.webp" layout="fill" alt="nice" />
               </SliderThumb>
             </Slider>
