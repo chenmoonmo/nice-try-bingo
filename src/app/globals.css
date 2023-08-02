@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* decaler font */
-@font-face {
-  font-family: 'qiuhong';
-  src: url('/YanShiQiuHongKai-2.ttf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

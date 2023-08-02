@@ -6,6 +6,9 @@ import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
 import {
   Button,
+  Editable,
+  EditablePreview,
+  EditableTextarea,
   Select,
   Slider,
   SliderFilledTrack,
@@ -16,6 +19,7 @@ import {
 import html2canvas from "html2canvas";
 import { HexColorPicker } from "react-colorful";
 import Image from "next/image";
+import "./page.css";
 
 const Text = memo(() => {
   return (
@@ -34,6 +38,7 @@ export default function Who() {
   const posterRef = React.useRef<HTMLDivElement>(null);
 
   const [fontSize, setFontSize] = useState(50);
+  const [fontFamily, setFontFamily] = useState<string>("qiuhong");
   const [color, setColor] = useState("#8A336C");
 
   const handleDownload = useCallback(() => {
@@ -108,20 +113,26 @@ export default function Who() {
               >
                 <h2 className="text-6xl">HELLO</h2>
                 <h3 className="leading-7 text-4xl">I&apos;M</h3>
-                <div
+                <Editable
+                  defaultValue="播客布林"
                   className={`font-[qiuhong] text-black mt-2 tracking-widest`}
-                  contentEditable
                   style={{
                     fontSize: `${fontSize}px`,
+                    fontFamily: `${fontFamily}`,
                     lineHeight: `${fontSize}px`,
                   }}
                 >
-                  播客布林
-                </div>
+                  <EditablePreview w="full" minH="20px" />
+                  <EditableTextarea />
+                </Editable>
               </div>
             </div>
 
             <div className="mt-4">修改上面的文字，输入你的答案</div>
+            <div className="mt-2 text-xs text-gray-300">
+              <div>如果有的字打不出来请切换字体，Useful Idito 只支持英文。</div>
+              <div>请尽可能使用电脑的 Chrome 浏览器操作。</div>
+            </div>
           </div>
           <div className="flex flex-col justify-start  md:ml-10 mt-4 md:mt-0">
             <HexColorPicker
@@ -129,6 +140,16 @@ export default function Who() {
               onChange={setColor}
               className="!w-full min-w-[200px] !h-[150px] md:!h-[200px]"
             />
+            <label className="mb-1 mt-4">字体</label>
+            <Select
+              value={fontFamily}
+              onChange={(e) => setFontFamily(e.target.value)}
+            >
+              <option value="qiuhong">播客布林的样子</option>
+              <option value="experiment">Useful Idito 的样子</option>
+              <option value="ZCOOL KuaiLe">ZCOOL KuaiLe</option>
+              <option value="sans-serif">sans-serif</option>
+            </Select>
             <label className="mb-1 mt-4">字体大小</label>
             <Slider min={24} max={64} value={fontSize} onChange={setFontSize}>
               <SliderTrack bg="red.100">

@@ -1,0 +1,18 @@
+/* 'ZCOOL KuaiLe' */
+@import url("https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap");
+
+
+/* decaler font */
+@font-face {
+  font-family: "qiuhong";
+  src: url("/YanShiQiuHongKai-2.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "experiment";
+  src: url("/experiment.ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
