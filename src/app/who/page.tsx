@@ -140,6 +140,7 @@ export default function Who() {
               className="mt-4"
               style={{
                 backgroundColor: color,
+                color: "#fff",
               }}
               onClick={handleDownload}
             >
