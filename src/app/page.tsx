@@ -4,7 +4,6 @@ import React, { memo, useCallback, useEffect } from "react";
 import { useState } from "react";
 import { toPng } from "html-to-image";
 import { saveAs } from "file-saver";
-import NextImage from "next/image";
 import { useToast } from "@chakra-ui/react";
 import html2canvas from "html2canvas";
 
