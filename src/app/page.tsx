@@ -197,7 +197,7 @@ export default function Home() {
                 htmlFor={"bingo" + bingo}
                 className="relative flex items-end justify-center cursor-pointer aspect-square hover:shadow-md"
               >
-                <div className="absolute w-full h-full flex items-center justify-center overflow-hidden">
+                <div className="absolute w-full h-full flex items-center justify-center overflow-hidden md:hidden">
                   <img
                     id={"bingo" + bingo + "image"}
                     src={currentImage}
@@ -205,6 +205,12 @@ export default function Home() {
                     className="w-full"
                   />
                 </div>
+                <img
+                  id={"bingo" + bingo + "image"}
+                  src={currentImage}
+                  alt={bingo}
+                  className="absolute w-full h-full object-cover"
+                />
 
                 <input
                   hidden
